@@ -1,0 +1,71 @@
+--- fs-2.0.1/tests/test_osfs.py.orig	2016-12-06 00:55:46.000000000 +0100
++++ fs-2.0.1/tests/test_osfs.py	2017-04-02 08:12:15.073189718 +0200
+@@ -2,7 +2,10 @@
+ 
+ import io
+ import os
+-import mock
++try:
++    import mock
++except ImportError:
++    from unittest import mock
+ import shutil
+ import tempfile
+ import unittest
+--- fs-2.0.1/tests/test_tempfs.py.orig	2016-10-14 21:17:36.000000000 +0200
++++ fs-2.0.1/tests/test_tempfs.py	2017-04-02 08:12:57.226522570 +0200
+@@ -4,7 +4,10 @@
+ 
+ from fs.tempfs import TempFS
+ from fs import errors
+-import mock
++try:
++    import mock
++except ImportError:
++    from unittest import mock
+ 
+ from .test_osfs import TestOSFS
+ 
+--- fs-2.0.1/setup.py.orig	2017-03-11 21:31:26.000000000 +0100
++++ fs-2.0.1/setup.py	2017-04-02 09:06:19.216486011 +0200
+@@ -1,5 +1,6 @@
+ #!/usr/bin/env python
+ 
++import sys
+ from setuptools import setup, find_packages
+ 
+ with open('fs/_version.py') as f:
+@@ -23,12 +24,11 @@
+     DESCRIPTION = f.read()
+ 
+ REQUIREMENTS = [
+-    "appdirs~=1.4.0",
+-    "enum34~=1.1.6",
++    "appdirs>=1.4.0",
+     "pytz",
+     "setuptools",
+-    "six~=1.10.0",
+-]
++    "six>=1.10.0",
++] + (["enum34>=1.1.6"] if sys.version_info[:2] < (3, 4) else []) + (["scandir>=1.5"] if sys.version_info[:2] < (3, 5) else [])
+ 
+ setup(
+     author="Will McGugan",
+@@ -36,16 +36,13 @@
+     classifiers=CLASSIFIERS,
+     description="Filesystem abstraction layer",
+     install_requires=REQUIREMENTS,
+-    extras_require={
+-        ":python_version<'3.5'": ['scandir~=1.5'],
+-    },
+     license="BSD",
+     long_description=DESCRIPTION,
+     name='fs',
+     packages=find_packages(exclude=("tests",)),
+     platforms=['any'],
+     test_suite="nose.collector",
+-    tests_require=['appdirs', 'mock', 'pytz', 'pyftpdlib'],
++    tests_require=['appdirs', 'pytz', 'pyftpdlib'] + (['mock'] if sys.version_info[:2] < (3, 3) else []),
+     url="http://pypi.python.org/pypi/fs/",
+     version=__version__,
+ )
