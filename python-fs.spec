@@ -7,15 +7,18 @@
 Summary:	Filesystem abstraction layer for Python 2
 Summary(pl.UTF-8):	Warstwa abstrakcji systemu plików dla Pythona 2
 Name:		python-fs
-Version:	2.0.1
+Version:	2.0.2
 Release:	1
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.python.org/simple/fs/
 Source0:	https://files.pythonhosted.org/packages/source/f/fs/fs-%{version}.tar.gz
-# Source0-md5:	7e2c2d22b96ca0b0fbf8c0d1c8e5fd81
+# Source0-md5:	419760a993e45a585e5db939e731d435
 Patch0:		%{name}-py3-requires.patch
 URL:		https://pypi.python.org/pypi/fs/
+%if %{with tests} && %(locale -a | grep -q '^C\.UTF-8$'; echo $?)
+BuildRequires:	glibc-localedb-all
+%endif
 %if %{with python2}
 BuildRequires:	python-modules >= 1:2.7
 BuildRequires:	python-setuptools
@@ -72,11 +75,11 @@ Biblioteka abstrakcji systemu plików, następca PyFilesystem.
 
 %prep
 %setup -q -n fs-%{version}
-%patch0 -p1 -b .orig
+%patch0 -p1
 
 %build
 # for tests
-export PYTHONPATH=$(pwd)
+export PYTHONPATH=$(pwd) LC_ALL=C.UTF-8
 
 %if %{with python2}
 %py_build %{?with_tests:test}
