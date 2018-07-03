@@ -8,7 +8,7 @@ Summary:	Filesystem abstraction layer for Python 2
 Summary(pl.UTF-8):	Warstwa abstrakcji systemu plików dla Pythona 2
 Name:		python-fs
 Version:	2.0.2
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.python.org/simple/fs/
