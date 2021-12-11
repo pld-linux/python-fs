@@ -7,13 +7,13 @@
 Summary:	Filesystem abstraction layer for Python 2
 Summary(pl.UTF-8):	Warstwa abstrakcji systemu plików dla Pythona 2
 Name:		python-fs
-Version:	2.4.11
-Release:	3
+Version:	2.4.14
+Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/fs/
 Source0:	https://files.pythonhosted.org/packages/source/f/fs/fs-%{version}.tar.gz
-# Source0-md5:	01b2e57b3622aa49cbaa668c81a87cb7
+# Source0-md5:	e749e2453ed77e376e9146aa3d6f2efa
 Patch0:		%{name}-py3-requires.patch
 URL:		https://pypi.org/project/fs/
 %if %{with tests} && %(locale -a | grep -q '^C\.utf8$'; echo $?)
@@ -21,13 +21,18 @@ BuildRequires:	glibc-localedb-all
 %endif
 %if %{with python2}
 BuildRequires:	python-modules >= 1:2.7
-BuildRequires:	python-setuptools
+BuildRequires:	python-setuptools >= 38.3.0
 %if %{with tests}
 BuildRequires:	python-appdirs >= 1.4.3
 BuildRequires:	python-backports.os >= 0.1
 BuildRequires:	python-enum34 >= 1.1.6
-BuildRequires:	python-mock
-BuildRequires:	python-pyftpdlib
+BuildRequires:	python-mock >= 3.0
+BuildRequires:	python-parameterized >= 0.8
+BuildRequires:	python-psutil >= 5.0
+BuildRequires:	python-pyftpdlib >= 1.5
+BuildRequires:	python-pysendfile >= 2.0
+BuildRequires:	python-pytest >= 4.6
+BuildRequires:	python-pytest-randomly >= 1.2
 BuildRequires:	python-pytz
 BuildRequires:	python-scandir >= 1.5
 BuildRequires:	python-six >= 1.10.0
@@ -36,10 +41,14 @@ BuildRequires:	python-typing >= 3.6
 %endif
 %if %{with python3}
 BuildRequires:	python3-modules >= 1:3.4
-BuildRequires:	python3-setuptools
+BuildRequires:	python3-setuptools >= 38.3.0
 %if %{with tests}
 BuildRequires:	python3-appdirs >= 1.4.3
-BuildRequires:	python3-pyftpdlib
+BuildRequires:	python3-parameterized >= 0.8
+BuildRequires:	python3-psutil >= 5.0
+BuildRequires:	python3-pyftpdlib >= 1.5
+BuildRequires:	python3-pytest >= 4.6
+BuildRequires:	python3-pytest-randomly >= 1.2
 BuildRequires:	python3-pytz
 %if "%{py3_ver}" < "3.5"
 BuildRequires:	python3-scandir >= 1.5
