@@ -21,7 +21,7 @@ BuildRequires:	glibc-localedb-all
 %endif
 %if %{with python2}
 BuildRequires:	python-modules >= 1:2.7
-BuildRequires:	python-setuptools >= 38.3.0
+BuildRequires:	python-setuptools >= 1:38.3.0
 %if %{with tests}
 BuildRequires:	python-appdirs >= 1.4.3
 BuildRequires:	python-backports.os >= 0.1
@@ -41,7 +41,7 @@ BuildRequires:	python-typing >= 3.6
 %endif
 %if %{with python3}
 BuildRequires:	python3-modules >= 1:3.4
-BuildRequires:	python3-setuptools >= 38.3.0
+BuildRequires:	python3-setuptools >= 1:38.3.0
 %if %{with tests}
 BuildRequires:	python3-appdirs >= 1.4.3
 BuildRequires:	python3-parameterized >= 0.8
