@@ -1,19 +1,20 @@
 #
 # Conditional build:
-%bcond_with	tests	# unit tests (some failing)
+%bcond_without	doc	# Sphinx documentation
+%bcond_without	tests	# unit tests
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
 Summary:	Filesystem abstraction layer for Python 2
 Summary(pl.UTF-8):	Warstwa abstrakcji systemu plików dla Pythona 2
 Name:		python-fs
-Version:	2.4.14
+Version:	2.4.15
 Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/fs/
 Source0:	https://files.pythonhosted.org/packages/source/f/fs/fs-%{version}.tar.gz
-# Source0-md5:	e749e2453ed77e376e9146aa3d6f2efa
+# Source0-md5:	a83a339af4e862e770247d79c1e01f5f
 Patch0:		%{name}-py3-requires.patch
 URL:		https://pypi.org/project/fs/
 %if %{with tests} && %(locale -a | grep -q '^C\.utf8$'; echo $?)
@@ -59,6 +60,11 @@ BuildRequires:	python3-typing >= 3.6
 %endif
 %endif
 %endif
+%if %{with doc}
+BuildRequires:	python3-recommonmark >= 0.6
+BuildRequires:	python3-sphinx_rtd_theme >= 0.5.1
+BuildRequires:	sphinx-pdg-3 >= 3.0
+%endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 Requires:	python-modules >= 1:2.7
@@ -83,6 +89,17 @@ A filesystem abstraction library, successor to PyFilesystem.
 %description -n python3-fs -l pl.UTF-8
 Biblioteka abstrakcji systemu plików, następca PyFilesystem.
 
+%package apidocs
+Summary:	API documentation for Python fs module
+Summary(pl.UTF-8):	Dokumentacja API modułu Pythona fs
+Group:		Documentation
+
+%description apidocs
+API documentation for Python fs module.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API modułu Pythona fs.
+
 %prep
 %setup -q -n fs-%{version}
 %patch0 -p1
@@ -95,8 +112,10 @@ Biblioteka abstrakcji systemu plików, następca PyFilesystem.
 %py_build
 
 %if %{with tests}
-LC_ALL=C.UTF-8 PYTHONPATH=$(pwd) \
-%{__python} -m unittest discover -s tests
+LC_ALL=C.UTF-8 \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+PYTHONPATH=$(pwd) \
+%{__python} -m pytest tests
 %endif
 %endif
 
@@ -104,9 +123,15 @@ LC_ALL=C.UTF-8 PYTHONPATH=$(pwd) \
 %py3_build
 
 %if %{with tests}
-LC_ALL=C.UTF-8 PYTHONPATH=$(pwd) \
-%{__python3} -m unittest discover -s tests
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+PYTHONPATH=$(pwd) \
+%{__python3} -m pytest tests
 %endif
+%endif
+
+%if %{with doc}
+%{__make} -C docs html \
+	SPHINXBUILD=sphinx-build-3
 %endif
 
 %install
@@ -139,4 +164,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE README.md
 %{py3_sitescriptdir}/fs
 %{py3_sitescriptdir}/fs-%{version}-py*.egg-info
+%endif
+
+%if %{with doc}
+%files apidocs
+%defattr(644,root,root,755)
+%doc docs/build/html/{_modules,_static,reference,*.html,*.js}
 %endif
