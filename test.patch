@@ -1,0 +1,14 @@
+--- fs-2.4.16/fs/test.py~	2022-05-02 11:22:31.000000000 +0200
++++ fs-2.4.16/fs/test.py	2025-03-23 20:07:18.199982870 +0100
+@@ -1082,7 +1082,10 @@
+         self.fs.makedirs("foo/bar/baz/")
+ 
+         error_msg = "resource 'foo/bar/egg/test.txt' not found"
+-        assertRaisesRegex = getattr(self, "assertRaisesRegex", self.assertRaisesRegexp)
++        if six.PY2:
++            assertRaisesRegex = getattr(self, "assertRaisesRegex", self.assertRaisesRegexp)
++        else:
++            assertRaisesRegex = getattr(self, "assertRaisesRegex", self.assertRaisesRegex)
+         with assertRaisesRegex(errors.ResourceNotFound, error_msg):
+             self.fs.remove("foo/bar/egg/test.txt")
+ 

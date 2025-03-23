@@ -9,12 +9,13 @@ Summary:	Filesystem abstraction layer for Python 2
 Summary(pl.UTF-8):	Warstwa abstrakcji systemu plików dla Pythona 2
 Name:		python-fs
 Version:	2.4.16
-Release:	3
+Release:	4
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/fs/
 Source0:	https://files.pythonhosted.org/packages/source/f/fs/fs-%{version}.tar.gz
 # Source0-md5:	2c9dae3d52950407fe265c3576396c33
+Patch0:		test.patch
 URL:		https://pypi.org/project/fs/
 %if %{with tests} && %(locale -a | grep -q '^C\.utf8$'; echo $?)
 BuildRequires:	glibc-localedb-all
@@ -101,6 +102,7 @@ Dokumentacja API modułu Pythona fs.
 
 %prep
 %setup -q -n fs-%{version}
+%patch -P 0 -p1
 
 # relies on pyftpdlib tests
 %{__rm} tests/test_ftpfs.py
